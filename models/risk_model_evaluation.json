@@ -1,0 +1,998 @@
+{
+  "schema_version": 1,
+  "description": "Evaluation of the committed dissatisfaction-risk model artifact. The model is evaluated as-is; it is not refit or replaced.",
+  "provenance": {
+    "evaluation_script": "scripts/evaluate_risk_model.py",
+    "model_path": "models/dissatisfaction_risk_model.pkl",
+    "model_sha256": "281eef292a49450392acec7334e88d980cc3ae1f1a04ca1ae517848c9cd4451a",
+    "threshold_config_path": "models/dissatisfaction_risk_threshold.json",
+    "labeled_dataset_sha256": "e42a79357662764fc0c8f4678edbe37f682ce0dcee25e6612437bbe0e1254183",
+    "labeled_ticket_ids_sha256": "c9d8b1514bdb8c1302f8eac52a05889ee502a8549ece13c81a5691d44524c8f7",
+    "full_population_features_sha256": "5332382d59cf09c0af88bd37ce26fac5bd8ca7053fb6487deba850162bd98269",
+    "random_seed": 42,
+    "environment": {
+      "python": "3.11.9",
+      "pandas": "3.0.5",
+      "numpy": "2.4.6",
+      "scikit-learn": "1.9.0"
+    }
+  },
+  "target": {
+    "name": "is_dissatisfied",
+    "definition": "1 if Customer Satisfaction Rating <= 2; 0 if >= 3; missing if no rating.",
+    "availability": "Ratings exist only for Closed tickets; Open and Pending tickets have no target."
+  },
+  "dataset": {
+    "full_population": 8469,
+    "csat_observed": 2769,
+    "csat_unobserved": 5700,
+    "positive": 1102,
+    "negative": 1667,
+    "prevalence": 0.397978,
+    "split": {
+      "method": "stratified train_test_split, test_size=0.20, random_state=42 (as in notebook 04)",
+      "train": {
+        "n": 2215,
+        "positive": 882,
+        "negative": 1333
+      },
+      "test": {
+        "n": 554,
+        "positive": 220,
+        "negative": 334
+      }
+    }
+  },
+  "features": {
+    "model_features": [
+      "Ticket Priority",
+      "Ticket Channel",
+      "sentiment_label",
+      "topic_id",
+      "sentiment_score"
+    ],
+    "excluded_outcome_columns": [
+      "Customer Satisfaction Rating",
+      "Has CSAT",
+      "is_dissatisfied",
+      "Resolution",
+      "Time to Resolution",
+      "Ticket Status"
+    ],
+    "excluded_columns_absent_from_features": true,
+    "sentiment_derived": [
+      "sentiment_label",
+      "sentiment_score"
+    ],
+    "text_derived": [
+      "sentiment_label",
+      "sentiment_score",
+      "topic_id"
+    ],
+    "notes": [
+      "sentiment_score is the confidence of the predicted sentiment label, not a polarity score.",
+      "No feature is derived from CSAT, resolution, or ticket status (no target leakage established).",
+      "Prediction-time availability cannot be fully established: the dataset lacks a reliable ticket creation timestamp."
+    ]
+  },
+  "test_metrics": {
+    "note": "Held-out test portion (n=554), used once for final reporting.",
+    "roc_auc": 0.507955,
+    "roc_auc_bootstrap_95ci": [
+      0.460838,
+      0.555699
+    ],
+    "roc_auc_permutation_p_value": 0.368816,
+    "average_precision": 0.416851,
+    "average_precision_bootstrap_95ci": [
+      0.364013,
+      0.487046
+    ],
+    "train_roc_auc": 0.747712,
+    "train_average_precision": 0.682601,
+    "n_bootstrap": 2000,
+    "n_permutations": 2000
+  },
+  "baselines": {
+    "no_skill_average_precision": 0.397112,
+    "random_scores": {
+      "n_draws": 2000,
+      "average_precision_mean": 0.403052,
+      "average_precision_95_range": [
+        0.364018,
+        0.44439
+      ],
+      "roc_auc_mean": 0.499541,
+      "roc_auc_95_range": [
+        0.450898,
+        0.546573
+      ]
+    },
+    "base_rate_prediction": {
+      "value": 0.398194,
+      "brier": 0.239415,
+      "log_loss": 0.671826
+    }
+  },
+  "calibration": {
+    "brier": 0.24377,
+    "log_loss": 0.682058,
+    "base_rate_brier": 0.239415,
+    "base_rate_log_loss": 0.671826,
+    "calibration_fit": {
+      "intercept": -0.358162,
+      "slope": 0.136877
+    },
+    "calibration_fit_ideal": {
+      "intercept": 0.0,
+      "slope": 1.0
+    },
+    "expected_calibration_error": 0.070017,
+    "reliability_bins": [
+      {
+        "bin": 1,
+        "n": 56,
+        "mean_score": 0.249812,
+        "observed_rate": 0.357143
+      },
+      {
+        "bin": 2,
+        "n": 55,
+        "mean_score": 0.3316,
+        "observed_rate": 0.345455
+      },
+      {
+        "bin": 3,
+        "n": 55,
+        "mean_score": 0.358017,
+        "observed_rate": 0.363636
+      },
+      {
+        "bin": 4,
+        "n": 56,
+        "mean_score": 0.377491,
+        "observed_rate": 0.517857
+      },
+      {
+        "bin": 5,
+        "n": 55,
+        "mean_score": 0.388028,
+        "observed_rate": 0.472727
+      },
+      {
+        "bin": 6,
+        "n": 55,
+        "mean_score": 0.39613,
+        "observed_rate": 0.345455
+      },
+      {
+        "bin": 7,
+        "n": 56,
+        "mean_score": 0.407485,
+        "observed_rate": 0.410714
+      },
+      {
+        "bin": 8,
+        "n": 55,
+        "mean_score": 0.432828,
+        "observed_rate": 0.309091
+      },
+      {
+        "bin": 9,
+        "n": 55,
+        "mean_score": 0.465615,
+        "observed_rate": 0.381818
+      },
+      {
+        "bin": 10,
+        "n": 56,
+        "mean_score": 0.550119,
+        "observed_rate": 0.464286
+      }
+    ],
+    "mean_score_test": 0.395716,
+    "note": "Mean score near prevalence reflects log-loss training, not calibration."
+  },
+  "repeated_cv": {
+    "scope": "Training portion only (n=2215); in-memory clones of the pipeline; no artifacts saved.",
+    "splits": 5,
+    "repeats": 5,
+    "random_state": 42,
+    "summary": {
+      "roc_auc": {
+        "mean": 0.51224,
+        "std": 0.02644,
+        "min": 0.467739,
+        "max": 0.581135
+      },
+      "average_precision": {
+        "mean": 0.408274,
+        "std": 0.020421,
+        "min": 0.372258,
+        "max": 0.446282
+      },
+      "brier": {
+        "mean": 0.247107,
+        "std": 0.004408,
+        "min": 0.239443,
+        "max": 0.255921
+      }
+    },
+    "folds": [
+      {
+        "repeat": 1,
+        "fold": 1,
+        "roc_auc": 0.545134,
+        "average_precision": 0.435126,
+        "brier": 0.240817
+      },
+      {
+        "repeat": 1,
+        "fold": 2,
+        "roc_auc": 0.491249,
+        "average_precision": 0.386317,
+        "brier": 0.250832
+      },
+      {
+        "repeat": 1,
+        "fold": 3,
+        "roc_auc": 0.504873,
+        "average_precision": 0.395197,
+        "brier": 0.247893
+      },
+      {
+        "repeat": 1,
+        "fold": 4,
+        "roc_auc": 0.467739,
+        "average_precision": 0.372258,
+        "brier": 0.252808
+      },
+      {
+        "repeat": 1,
+        "fold": 5,
+        "roc_auc": 0.481486,
+        "average_precision": 0.378697,
+        "brier": 0.253211
+      },
+      {
+        "repeat": 2,
+        "fold": 1,
+        "roc_auc": 0.581135,
+        "average_precision": 0.446282,
+        "brier": 0.239443
+      },
+      {
+        "repeat": 2,
+        "fold": 2,
+        "roc_auc": 0.491398,
+        "average_precision": 0.397978,
+        "brier": 0.250586
+      },
+      {
+        "repeat": 2,
+        "fold": 3,
+        "roc_auc": 0.528718,
+        "average_precision": 0.428892,
+        "brier": 0.24262
+      },
+      {
+        "repeat": 2,
+        "fold": 4,
+        "roc_auc": 0.53324,
+        "average_precision": 0.419813,
+        "brier": 0.244779
+      },
+      {
+        "repeat": 2,
+        "fold": 5,
+        "roc_auc": 0.481561,
+        "average_precision": 0.390194,
+        "brier": 0.251524
+      },
+      {
+        "repeat": 3,
+        "fold": 1,
+        "roc_auc": 0.499533,
+        "average_precision": 0.395226,
+        "brier": 0.252125
+      },
+      {
+        "repeat": 3,
+        "fold": 2,
+        "roc_auc": 0.500722,
+        "average_precision": 0.428334,
+        "brier": 0.245134
+      },
+      {
+        "repeat": 3,
+        "fold": 3,
+        "roc_auc": 0.530037,
+        "average_precision": 0.412877,
+        "brier": 0.242256
+      },
+      {
+        "repeat": 3,
+        "fold": 4,
+        "roc_auc": 0.483795,
+        "average_precision": 0.379842,
+        "brier": 0.255921
+      },
+      {
+        "repeat": 3,
+        "fold": 5,
+        "roc_auc": 0.543071,
+        "average_precision": 0.432613,
+        "brier": 0.241455
+      },
+      {
+        "repeat": 4,
+        "fold": 1,
+        "roc_auc": 0.488509,
+        "average_precision": 0.40027,
+        "brier": 0.250183
+      },
+      {
+        "repeat": 4,
+        "fold": 2,
+        "roc_auc": 0.504864,
+        "average_precision": 0.390871,
+        "brier": 0.247789
+      },
+      {
+        "repeat": 4,
+        "fold": 3,
+        "roc_auc": 0.531644,
+        "average_precision": 0.421285,
+        "brier": 0.243988
+      },
+      {
+        "repeat": 4,
+        "fold": 4,
+        "roc_auc": 0.536538,
+        "average_precision": 0.435519,
+        "brier": 0.243044
+      },
+      {
+        "repeat": 4,
+        "fold": 5,
+        "roc_auc": 0.494999,
+        "average_precision": 0.40054,
+        "brier": 0.247406
+      },
+      {
+        "repeat": 5,
+        "fold": 1,
+        "roc_auc": 0.5149,
+        "average_precision": 0.411959,
+        "brier": 0.246509
+      },
+      {
+        "repeat": 5,
+        "fold": 2,
+        "roc_auc": 0.551134,
+        "average_precision": 0.434311,
+        "brier": 0.241571
+      },
+      {
+        "repeat": 5,
+        "fold": 3,
+        "roc_auc": 0.493839,
+        "average_precision": 0.394056,
+        "brier": 0.246653
+      },
+      {
+        "repeat": 5,
+        "fold": 4,
+        "roc_auc": 0.516652,
+        "average_precision": 0.419564,
+        "brier": 0.251032
+      },
+      {
+        "repeat": 5,
+        "fold": 5,
+        "roc_auc": 0.509225,
+        "average_precision": 0.398836,
+        "brier": 0.248087
+      }
+    ]
+  },
+  "threshold_analysis": {
+    "selected_threshold": null,
+    "note": "No production threshold is selected or promoted.",
+    "historical_threshold": {
+      "value": 0.3,
+      "provenance": "Selected in notebook 04 as the max-F1 value of the grid 0.30-0.70 on the same test set used to report it; 0.30 is the grid minimum. Exploratory and test-selected. Not read by any pipeline code.",
+      "test": {
+        "rule": "score >= 0.3",
+        "flagged_share": 0.909747,
+        "precision": 0.39881,
+        "recall": 0.913636,
+        "f1": 0.555249,
+        "accuracy": 0.418773,
+        "confusion_matrix": {
+          "tp": 201,
+          "fp": 303,
+          "fn": 19,
+          "tn": 31
+        }
+      },
+      "full_population_flagged_share": 0.907899
+    },
+    "test_reference_thresholds": [
+      {
+        "rule": "score >= 0.3",
+        "flagged_share": 0.909747,
+        "precision": 0.39881,
+        "recall": 0.913636,
+        "f1": 0.555249,
+        "accuracy": 0.418773,
+        "confusion_matrix": {
+          "tp": 201,
+          "fp": 303,
+          "fn": 19,
+          "tn": 31
+        },
+        "threshold": 0.3
+      },
+      {
+        "rule": "score >= 0.35",
+        "flagged_share": 0.781588,
+        "precision": 0.401848,
+        "recall": 0.790909,
+        "f1": 0.532925,
+        "accuracy": 0.449458,
+        "confusion_matrix": {
+          "tp": 174,
+          "fp": 259,
+          "fn": 46,
+          "tn": 75
+        },
+        "threshold": 0.35
+      },
+      {
+        "rule": "score >= 0.4",
+        "flagged_share": 0.413357,
+        "precision": 0.39738,
+        "recall": 0.413636,
+        "f1": 0.405345,
+        "accuracy": 0.518051,
+        "confusion_matrix": {
+          "tp": 91,
+          "fp": 138,
+          "fn": 129,
+          "tn": 196
+        },
+        "threshold": 0.4
+      },
+      {
+        "rule": "score >= 0.45",
+        "flagged_share": 0.180505,
+        "precision": 0.44,
+        "recall": 0.2,
+        "f1": 0.275,
+        "accuracy": 0.581227,
+        "confusion_matrix": {
+          "tp": 44,
+          "fp": 56,
+          "fn": 176,
+          "tn": 278
+        },
+        "threshold": 0.45
+      },
+      {
+        "rule": "score >= 0.5",
+        "flagged_share": 0.086643,
+        "precision": 0.4375,
+        "recall": 0.095455,
+        "f1": 0.156716,
+        "accuracy": 0.592058,
+        "confusion_matrix": {
+          "tp": 21,
+          "fp": 27,
+          "fn": 199,
+          "tn": 307
+        },
+        "threshold": 0.5
+      }
+    ],
+    "test_baselines": [
+      {
+        "rule": "flag everyone",
+        "flagged_share": 1.0,
+        "precision": 0.397112,
+        "recall": 1.0,
+        "f1": 0.568475,
+        "accuracy": 0.397112,
+        "confusion_matrix": {
+          "tp": 220,
+          "fp": 334,
+          "fn": 0,
+          "tn": 0
+        }
+      },
+      {
+        "rule": "flag nobody",
+        "flagged_share": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "accuracy": 0.602888,
+        "confusion_matrix": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 220,
+          "tn": 334
+        }
+      },
+      {
+        "rule": "random flags at rate 0.909747 (mean of 2000 draws)",
+        "flagged_share": 0.909625,
+        "precision": 0.397159,
+        "recall": 0.909736,
+        "f1": 0.552908,
+        "accuracy": 0.415797
+      }
+    ],
+    "training_oof": {
+      "scope": "Out-of-fold scores on the training portion, averaged over the repeated CV; the test set is not used.",
+      "curve": [
+        {
+          "rule": "score >= 0.05",
+          "flagged_share": 1.0,
+          "precision": 0.398194,
+          "recall": 1.0,
+          "f1": 0.569583,
+          "accuracy": 0.398194,
+          "confusion_matrix": {
+            "tp": 882,
+            "fp": 1333,
+            "fn": 0,
+            "tn": 0
+          },
+          "threshold": 0.05
+        },
+        {
+          "rule": "score >= 0.1",
+          "flagged_share": 0.999549,
+          "precision": 0.397922,
+          "recall": 0.998866,
+          "f1": 0.569121,
+          "accuracy": 0.397743,
+          "confusion_matrix": {
+            "tp": 881,
+            "fp": 1333,
+            "fn": 1,
+            "tn": 0
+          },
+          "threshold": 0.1
+        },
+        {
+          "rule": "score >= 0.15",
+          "flagged_share": 0.99684,
+          "precision": 0.397192,
+          "recall": 0.994331,
+          "f1": 0.567638,
+          "accuracy": 0.39684,
+          "confusion_matrix": {
+            "tp": 877,
+            "fp": 1331,
+            "fn": 5,
+            "tn": 2
+          },
+          "threshold": 0.15
+        },
+        {
+          "rule": "score >= 0.2",
+          "flagged_share": 0.98465,
+          "precision": 0.399817,
+          "recall": 0.988662,
+          "f1": 0.569376,
+          "accuracy": 0.404515,
+          "confusion_matrix": {
+            "tp": 872,
+            "fp": 1309,
+            "fn": 10,
+            "tn": 24
+          },
+          "threshold": 0.2
+        },
+        {
+          "rule": "score >= 0.25",
+          "flagged_share": 0.965237,
+          "precision": 0.402245,
+          "recall": 0.975057,
+          "f1": 0.569536,
+          "accuracy": 0.413093,
+          "confusion_matrix": {
+            "tp": 860,
+            "fp": 1278,
+            "fn": 22,
+            "tn": 55
+          },
+          "threshold": 0.25
+        },
+        {
+          "rule": "score >= 0.3",
+          "flagged_share": 0.933183,
+          "precision": 0.403967,
+          "recall": 0.946712,
+          "f1": 0.566294,
+          "accuracy": 0.422573,
+          "confusion_matrix": {
+            "tp": 835,
+            "fp": 1232,
+            "fn": 47,
+            "tn": 101
+          },
+          "threshold": 0.3
+        },
+        {
+          "rule": "score >= 0.35",
+          "flagged_share": 0.792777,
+          "precision": 0.401481,
+          "recall": 0.79932,
+          "f1": 0.534496,
+          "accuracy": 0.445598,
+          "confusion_matrix": {
+            "tp": 705,
+            "fp": 1051,
+            "fn": 177,
+            "tn": 282
+          },
+          "threshold": 0.35
+        },
+        {
+          "rule": "score >= 0.4",
+          "flagged_share": 0.462302,
+          "precision": 0.399414,
+          "recall": 0.463719,
+          "f1": 0.429171,
+          "accuracy": 0.508804,
+          "confusion_matrix": {
+            "tp": 409,
+            "fp": 615,
+            "fn": 473,
+            "tn": 718
+          },
+          "threshold": 0.4
+        },
+        {
+          "rule": "score >= 0.45",
+          "flagged_share": 0.20316,
+          "precision": 0.42,
+          "recall": 0.214286,
+          "f1": 0.283784,
+          "accuracy": 0.5693,
+          "confusion_matrix": {
+            "tp": 189,
+            "fp": 261,
+            "fn": 693,
+            "tn": 1072
+          },
+          "threshold": 0.45
+        },
+        {
+          "rule": "score >= 0.5",
+          "flagged_share": 0.078555,
+          "precision": 0.373563,
+          "recall": 0.073696,
+          "f1": 0.123106,
+          "accuracy": 0.581941,
+          "confusion_matrix": {
+            "tp": 65,
+            "fp": 109,
+            "fn": 817,
+            "tn": 1224
+          },
+          "threshold": 0.5
+        },
+        {
+          "rule": "score >= 0.55",
+          "flagged_share": 0.030248,
+          "precision": 0.298507,
+          "recall": 0.022676,
+          "f1": 0.04215,
+          "accuracy": 0.589616,
+          "confusion_matrix": {
+            "tp": 20,
+            "fp": 47,
+            "fn": 862,
+            "tn": 1286
+          },
+          "threshold": 0.55
+        },
+        {
+          "rule": "score >= 0.6",
+          "flagged_share": 0.008126,
+          "precision": 0.277778,
+          "recall": 0.005669,
+          "f1": 0.011111,
+          "accuracy": 0.598194,
+          "confusion_matrix": {
+            "tp": 5,
+            "fp": 13,
+            "fn": 877,
+            "tn": 1320
+          },
+          "threshold": 0.6
+        },
+        {
+          "rule": "score >= 0.65",
+          "flagged_share": 0.003612,
+          "precision": 0.375,
+          "recall": 0.003401,
+          "f1": 0.006742,
+          "accuracy": 0.600903,
+          "confusion_matrix": {
+            "tp": 3,
+            "fp": 5,
+            "fn": 879,
+            "tn": 1328
+          },
+          "threshold": 0.65
+        },
+        {
+          "rule": "score >= 0.7",
+          "flagged_share": 0.002257,
+          "precision": 0.4,
+          "recall": 0.002268,
+          "f1": 0.00451,
+          "accuracy": 0.601354,
+          "confusion_matrix": {
+            "tp": 2,
+            "fp": 3,
+            "fn": 880,
+            "tn": 1330
+          },
+          "threshold": 0.7
+        },
+        {
+          "rule": "score >= 0.75",
+          "flagged_share": 0.000903,
+          "precision": 0.5,
+          "recall": 0.001134,
+          "f1": 0.002262,
+          "accuracy": 0.601806,
+          "confusion_matrix": {
+            "tp": 1,
+            "fp": 1,
+            "fn": 881,
+            "tn": 1332
+          },
+          "threshold": 0.75
+        },
+        {
+          "rule": "score >= 0.8",
+          "flagged_share": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "accuracy": 0.601806,
+          "confusion_matrix": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 882,
+            "tn": 1333
+          },
+          "threshold": 0.8
+        },
+        {
+          "rule": "score >= 0.85",
+          "flagged_share": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "accuracy": 0.601806,
+          "confusion_matrix": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 882,
+            "tn": 1333
+          },
+          "threshold": 0.85
+        },
+        {
+          "rule": "score >= 0.9",
+          "flagged_share": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "accuracy": 0.601806,
+          "confusion_matrix": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 882,
+            "tn": 1333
+          },
+          "threshold": 0.9
+        },
+        {
+          "rule": "score >= 0.95",
+          "flagged_share": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "accuracy": 0.601806,
+          "confusion_matrix": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 882,
+            "tn": 1333
+          },
+          "threshold": 0.95
+        }
+      ],
+      "f1_maximizing_threshold_illustration": {
+        "threshold": 0.05,
+        "flagged_share_train_oof": 1.0,
+        "test_result": {
+          "rule": "score >= 0.05",
+          "flagged_share": 1.0,
+          "precision": 0.397112,
+          "recall": 1.0,
+          "f1": 0.568475,
+          "accuracy": 0.397112,
+          "confusion_matrix": {
+            "tp": 220,
+            "fp": 334,
+            "fn": 0,
+            "tn": 0
+          }
+        },
+        "note": "Shown only to illustrate that F1 maximization degenerates toward flagging nearly everyone; not promoted."
+      }
+    }
+  },
+  "ranking": {
+    "ordering": "score descending; decile 1 = highest scores; ties broken by ticket_id",
+    "prevalence": 0.397112,
+    "top_share_precision": [
+      {
+        "top_share": 0.05,
+        "n": 28,
+        "precision": 0.535714,
+        "lift": 1.349026
+      },
+      {
+        "top_share": 0.1,
+        "n": 55,
+        "precision": 0.454545,
+        "lift": 1.144628
+      },
+      {
+        "top_share": 0.2,
+        "n": 111,
+        "precision": 0.423423,
+        "lift": 1.066257
+      }
+    ],
+    "deciles": [
+      {
+        "decile": 1,
+        "n": 56,
+        "min_score": 0.495904,
+        "max_score": 0.779962,
+        "observed_dissatisfaction_rate": 0.464286,
+        "lift": 1.169156
+      },
+      {
+        "decile": 2,
+        "n": 55,
+        "min_score": 0.443692,
+        "max_score": 0.494722,
+        "observed_dissatisfaction_rate": 0.381818,
+        "lift": 0.961488
+      },
+      {
+        "decile": 3,
+        "n": 56,
+        "min_score": 0.420673,
+        "max_score": 0.443692,
+        "observed_dissatisfaction_rate": 0.321429,
+        "lift": 0.809416
+      },
+      {
+        "decile": 4,
+        "n": 55,
+        "min_score": 0.401198,
+        "max_score": 0.419269,
+        "observed_dissatisfaction_rate": 0.4,
+        "lift": 1.007273
+      },
+      {
+        "decile": 5,
+        "n": 55,
+        "min_score": 0.391321,
+        "max_score": 0.400575,
+        "observed_dissatisfaction_rate": 0.345455,
+        "lift": 0.869917
+      },
+      {
+        "decile": 6,
+        "n": 56,
+        "min_score": 0.384209,
+        "max_score": 0.391127,
+        "observed_dissatisfaction_rate": 0.482143,
+        "lift": 1.214123
+      },
+      {
+        "decile": 7,
+        "n": 55,
+        "min_score": 0.368192,
+        "max_score": 0.384209,
+        "observed_dissatisfaction_rate": 0.509091,
+        "lift": 1.281983
+      },
+      {
+        "decile": 8,
+        "n": 56,
+        "min_score": 0.34798,
+        "max_score": 0.368192,
+        "observed_dissatisfaction_rate": 0.357143,
+        "lift": 0.899351
+      },
+      {
+        "decile": 9,
+        "n": 55,
+        "min_score": 0.305967,
+        "max_score": 0.347536,
+        "observed_dissatisfaction_rate": 0.345455,
+        "lift": 0.869917
+      },
+      {
+        "decile": 10,
+        "n": 55,
+        "min_score": 0.124277,
+        "max_score": 0.305035,
+        "observed_dissatisfaction_rate": 0.363636,
+        "lift": 0.915702
+      }
+    ]
+  },
+  "permutation_importance_test_roc_auc": {
+    "Ticket Priority": {
+      "mean": 0.004958,
+      "std": 0.005754
+    },
+    "Ticket Channel": {
+      "mean": 0.006841,
+      "std": 0.015587
+    },
+    "sentiment_label": {
+      "mean": -0.003587,
+      "std": 0.002552
+    },
+    "topic_id": {
+      "mean": -0.001108,
+      "std": 0.019157
+    },
+    "sentiment_score": {
+      "mean": 0.000724,
+      "std": 0.020264
+    }
+  },
+  "full_population_scores": {
+    "n": 8469,
+    "mean": 0.396359,
+    "min": 0.084799,
+    "median": 0.392882,
+    "max": 0.851931,
+    "share_at_or_above": {
+      "0.3": 0.907899,
+      "0.35": 0.779431,
+      "0.4": 0.43429,
+      "0.45": 0.197072,
+      "0.5": 0.093163
+    }
+  },
+  "interpretation": [
+    "The dissatisfaction_risk_score is not a validated or calibrated probability: its Brier score and log-loss are no better than always predicting the base rate, and the calibration slope is far below 1.",
+    "No measurable predictive discrimination was demonstrated: held-out ROC-AUC and repeated cross-validated ROC-AUC are close to 0.5, and Average Precision is within the range expected from random scores.",
+    "The 0.30 threshold was originally selected on the same test set used to report its performance (notebook grid 0.30-0.70); it is exploratory and not a validated operating point. No production threshold is selected here.",
+    "At 0.30 the model flags about 91% of tickets, and flagging every ticket achieves a higher F1, so threshold metrics do not indicate usefulness.",
+    "The score should not be used to prioritize real customers.",
+    "The model is retained only as an experimental end-to-end scoring artifact that demonstrates the pipeline from ticket text to a stored model score.",
+    "Impurity-based feature importances of the fitted model do not indicate meaningful or causal drivers; held-out permutation importances are close to zero.",
+    "Prediction-time availability of the features cannot be fully established because the dataset lacks a reliable ticket creation timestamp."
+  ]
+}

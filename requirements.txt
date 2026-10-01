@@ -1,0 +1,21 @@
+# Streamlit Community Cloud dependencies for the support-analytics demo.
+# Select Python 3.11 in the app's Advanced settings before deploying.
+# Versions match the environment that validated the committed model
+# artifacts; scikit-learn must stay at 1.9.0 to load the pickled models.
+
+# CPU-only PyTorch. On Linux (Community Cloud), install the exact CPU wheel
+# from the PyTorch CPU index; a PyPI torch wheel for Linux pulls CUDA
+# packages. The wheel URL is used instead of --extra-index-url so that every
+# other package still resolves from PyPI. On Windows and macOS the PyPI
+# torch wheel is already CPU-only.
+torch @ https://download.pytorch.org/whl/cpu/torch-2.13.0%2Bcpu-cp311-cp311-manylinux_2_28_x86_64.whl#sha256=6746dbcbeb526eb61330b76b41ff1b4eb848951103a892eeb080dfa2b264667b ; sys_platform == "linux"
+torch==2.13.0 ; sys_platform != "linux"
+
+streamlit==1.64.0
+transformers==5.16.1
+
+joblib==1.5.3
+numpy==2.4.6
+pandas==3.0.5
+scikit-learn==1.9.0
+scipy==1.17.1

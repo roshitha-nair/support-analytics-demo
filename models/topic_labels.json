@@ -1,0 +1,308 @@
+{
+    "schema_version": 1,
+    "description": "Human-readable labels for the frozen BERTopic topic IDs. This registry is the authoritative label mapping applied to data/processed/customer_support_topics.csv, the star schema, the Power BI export and dashboard, and the API. The labels remain exploratory, human-interpreted themes (review_status: proposed), not a validated ground-truth issue taxonomy.",
+    "topic_run": "BERTopic run committed in b94ed5c, reduced to 30 topics (-1 to 28). Topic IDs are frozen; BERTopic is not rerun.",
+    "evidence_method": "Distinctive terms and recurring template sentences per topic, computed from data/processed/customer_support_topics.csv joined to the cleaned ticket descriptions.",
+    "topics": [
+        {
+            "id": -1,
+            "label": "Other or Unclassified Support Content",
+            "previous_label": "Other or Unclassified Support Content",
+            "group": "Unclassified",
+            "is_noise_cluster": false,
+            "confidence": "high",
+            "evidence": "BERTopic outlier topic; no dominant template sentence.",
+            "review_status": "proposed"
+        },
+        {
+            "id": 0,
+            "label": "Unresolved Issues After Troubleshooting or Updates",
+            "previous_label": "Issue After Firmware Update",
+            "group": "General Troubleshooting",
+            "is_noise_cluster": false,
+            "confidence": "medium",
+            "evidence": "Mixed cluster: firmware/software-update wording in 25% of tickets (17% corpus); remainder are generic troubleshooting sentences.",
+            "review_status": "proposed"
+        },
+        {
+            "id": 1,
+            "label": "Pricing, Cart and Order Content",
+            "previous_label": "App Issue Persists After Troubleshooting",
+            "group": "Other / Noise",
+            "is_noise_cluster": true,
+            "confidence": "medium",
+            "evidence": "price/cart/order/product_id terms in 56% of tickets (10% corpus); largely scraped e-commerce text.",
+            "review_status": "proposed"
+        },
+        {
+            "id": 2,
+            "label": "Data Loss and File Recovery",
+            "previous_label": "Account Access and Password Issues",
+            "group": "Data & Security",
+            "is_noise_cluster": false,
+            "confidence": "high",
+            "evidence": "[recurring template phrase removed] and [recurring template phrase removed] templates (87% of each template lands here).",
+            "review_status": "proposed"
+        },
+        {
+            "id": 3,
+            "label": "Account Access: Invalid Credentials",
+            "previous_label": "Data Loss and File Recovery",
+            "group": "Account & Access",
+            "is_noise_cluster": false,
+            "confidence": "high",
+            "evidence": "[recurring template phrase removed] / [recurring template phrase removed] template in 50% of tickets (89% of the template lands here).",
+            "review_status": "proposed"
+        },
+        {
+            "id": 4,
+            "label": "Error Messages and Error Codes",
+            "previous_label": "Error Messages and Error Codes",
+            "group": "Software & Apps",
+            "is_noise_cluster": false,
+            "confidence": "high",
+            "evidence": "[recurring template phrase removed] template (84% of the template lands here).",
+            "review_status": "proposed"
+        },
+        {
+            "id": 5,
+            "label": "Wi-Fi Connection Problems",
+            "previous_label": "Unable to Perform Desired Action",
+            "group": "Connectivity",
+            "is_noise_cluster": false,
+            "confidence": "high",
+            "evidence": "[recurring template phrase removed] template in 51% of tickets (82% of the template lands here).",
+            "review_status": "proposed"
+        },
+        {
+            "id": 6,
+            "label": "Security and Data Safety Concerns",
+            "previous_label": "Wi-Fi Connectivity Issues",
+            "group": "Data & Security",
+            "is_noise_cluster": false,
+            "confidence": "high",
+            "evidence": "[recurring template phrase removed] template (79% of the template lands here).",
+            "review_status": "proposed"
+        },
+        {
+            "id": 7,
+            "label": "Unable to Find Feature / How-To Guidance",
+            "previous_label": "Security and Data Safety Concerns",
+            "group": "Usage & Guidance",
+            "is_noise_cluster": false,
+            "confidence": "high",
+            "evidence": "[recurring template sentence removed] in 99.6% of tickets; [recurring template phrase removed].",
+            "review_status": "proposed"
+        },
+        {
+            "id": 8,
+            "label": "Urgent: Issue Affecting Work and Productivity",
+            "previous_label": "Charging Problems",
+            "group": "Urgency & Impact",
+            "is_noise_cluster": false,
+            "confidence": "high",
+            "evidence": "productivity / [recurring template phrase removed] wording in 100% of tickets (8% corpus).",
+            "review_status": "proposed"
+        },
+        {
+            "id": 9,
+            "label": "Unstable Internet Connection",
+            "previous_label": "Battery Life Issues",
+            "group": "Connectivity",
+            "is_noise_cluster": false,
+            "confidence": "high",
+            "evidence": "[recurring template phrase removed] template in 95% of tickets (100% of the template lands here).",
+            "review_status": "proposed"
+        },
+        {
+            "id": 10,
+            "label": "Charging Problems",
+            "previous_label": "Unstable Internet Connection",
+            "group": "Power & Battery",
+            "is_noise_cluster": false,
+            "confidence": "high",
+            "evidence": "[recurring template phrase removed] template (89% of the template lands here).",
+            "review_status": "proposed"
+        },
+        {
+            "id": 11,
+            "label": "Battery Life Issues",
+            "previous_label": "Software Bugs and Data Loss",
+            "group": "Power & Battery",
+            "is_noise_cluster": false,
+            "confidence": "high",
+            "evidence": "[recurring template phrase removed] in 99% of tickets; [recurring template phrase removed].",
+            "review_status": "proposed"
+        },
+        {
+            "id": 12,
+            "label": "Application Bugs Causing Data Loss and Errors",
+            "previous_label": "Application Crashes and Software Bugs",
+            "group": "Software & Apps",
+            "is_noise_cluster": false,
+            "confidence": "high",
+            "evidence": "[recurring template phrase removed] in 99% of tickets.",
+            "review_status": "proposed"
+        },
+        {
+            "id": 13,
+            "label": "Application Crashes During Specific Action",
+            "previous_label": "General Hardware Malfunction",
+            "group": "Software & Apps",
+            "is_noise_cluster": false,
+            "confidence": "high",
+            "evidence": "[recurring template phrase removed] in 100% of tickets.",
+            "review_status": "proposed"
+        },
+        {
+            "id": 14,
+            "label": "Software Update Checks / Already Up to Date",
+            "previous_label": "Software Freezing Issues",
+            "group": "Software & Apps",
+            "is_noise_cluster": false,
+            "confidence": "high",
+            "evidence": "[recurring template phrase removed] / [recurring template phrase removed] templates (55-58% of each template lands here).",
+            "review_status": "proposed"
+        },
+        {
+            "id": 15,
+            "label": "Screen Flickering / Display Hardware Problem",
+            "previous_label": "Software Update Availability",
+            "group": "Hardware & Device",
+            "is_noise_cluster": false,
+            "confidence": "high",
+            "evidence": "[recurring template phrase removed] in 99% of tickets.",
+            "review_status": "proposed"
+        },
+        {
+            "id": 16,
+            "label": "Device Not Turning On / Unresponsive",
+            "previous_label": "Screen and Display Problems",
+            "group": "Hardware & Device",
+            "is_noise_cluster": false,
+            "confidence": "high",
+            "evidence": "[recurring template phrase removed] in 100% of tickets.",
+            "review_status": "proposed"
+        },
+        {
+            "id": 17,
+            "label": "Software Freezing Issues",
+            "previous_label": "Urgent Issue Affecting Productivity",
+            "group": "Software & Apps",
+            "is_noise_cluster": false,
+            "confidence": "high",
+            "evidence": "[recurring template phrase removed] in 97% of tickets.",
+            "review_status": "proposed"
+        },
+        {
+            "id": 18,
+            "label": "Strange Noises / Suspected Hardware Fault",
+            "previous_label": "Device Not Turning On",
+            "group": "Hardware & Device",
+            "is_noise_cluster": false,
+            "confidence": "high",
+            "evidence": "[recurring template phrase removed] in 99% of tickets.",
+            "review_status": "proposed"
+        },
+        {
+            "id": 19,
+            "label": "Account Locked / Login Issues",
+            "previous_label": "Urgent Issue Affecting Productivity",
+            "group": "Account & Access",
+            "is_noise_cluster": false,
+            "confidence": "high",
+            "evidence": "[recurring template sentence removed] in 100% of tickets.",
+            "review_status": "proposed"
+        },
+        {
+            "id": 20,
+            "label": "Billing and Payment Content",
+            "previous_label": "Repair or Replacement Concerns",
+            "group": "Other / Noise",
+            "is_noise_cluster": true,
+            "confidence": "low",
+            "evidence": "billing/payment/credit/paypal terms in 62% of tickets (3% corpus); examples are largely scraped code and chat logs.",
+            "review_status": "proposed"
+        },
+        {
+            "id": 21,
+            "label": "Repair or Replacement Concerns",
+            "previous_label": "Refund Issues",
+            "group": "Hardware & Device",
+            "is_noise_cluster": false,
+            "confidence": "high",
+            "evidence": "[recurring template phrase removed] in 99% of tickets (3% corpus).",
+            "review_status": "proposed"
+        },
+        {
+            "id": 22,
+            "label": "Refund and Return Content",
+            "previous_label": "Invoice and Payment Issues",
+            "group": "Other / Noise",
+            "is_noise_cluster": true,
+            "confidence": "medium",
+            "evidence": "refund/return/shipping terms in 98% of tickets (4% corpus); text is largely scraped content.",
+            "review_status": "proposed"
+        },
+        {
+            "id": 23,
+            "label": "Invoice, Order and Email Content",
+            "previous_label": "Email and Account Issues",
+            "group": "Other / Noise",
+            "is_noise_cluster": true,
+            "confidence": "low",
+            "evidence": "invoice/email/order terms in 100% of tickets (9% corpus); small cluster (n=26).",
+            "review_status": "proposed"
+        },
+        {
+            "id": 24,
+            "label": "Other: Price-List Content",
+            "previous_label": "Other Support Content",
+            "group": "Other / Noise",
+            "is_noise_cluster": true,
+            "confidence": "low",
+            "evidence": "Price-list fragments such as [example fragment removed]; small cluster (n=17).",
+            "review_status": "proposed"
+        },
+        {
+            "id": 25,
+            "label": "Other: Store and Cart Content",
+            "previous_label": "Refund and Exchange Requests",
+            "group": "Other / Noise",
+            "is_noise_cluster": true,
+            "confidence": "low",
+            "evidence": "Store/cart fragments; no refund or exchange signal; small cluster (n=17).",
+            "review_status": "proposed"
+        },
+        {
+            "id": 26,
+            "label": "Other: Numeric and Code Fragments",
+            "previous_label": "Other Support Content",
+            "group": "Other / Noise",
+            "is_noise_cluster": true,
+            "confidence": "low",
+            "evidence": "Numeric and code-like fragments such as [example fragment removed]; small cluster (n=16).",
+            "review_status": "proposed"
+        },
+        {
+            "id": 27,
+            "label": "Other: Gift Card Content",
+            "previous_label": "Other Support Content",
+            "group": "Other / Noise",
+            "is_noise_cluster": true,
+            "confidence": "low",
+            "evidence": "gift/card terms in 100% of tickets (2% corpus); small cluster (n=12).",
+            "review_status": "proposed"
+        },
+        {
+            "id": 28,
+            "label": "Other: App and Menu Content",
+            "previous_label": "Other Support Content",
+            "group": "Other / Noise",
+            "is_noise_cluster": true,
+            "confidence": "low",
+            "evidence": "app/menu fragments and scraped links; small cluster (n=12).",
+            "review_status": "proposed"
+        }
+    ]
+}
